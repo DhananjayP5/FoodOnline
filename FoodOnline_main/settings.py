@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g4xmt9&@1gec-3+)ztb^$zho%jjfg&vvpakh-0#w1-!x$e$u-h'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -37,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'accounts',
+
 ]
 
 MIDDLEWARE = [
@@ -76,13 +80,13 @@ WSGI_APPLICATION = 'FoodOnline_main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'foodOnline_db',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST' : 'localhost',  
-
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST' : config('DB_HOST'), 
     }
 }
+AUTH_USER_MODEL = 'accounts.User'
 
 
 # Password validation
@@ -125,7 +129,18 @@ STATICFILES_DIRS = [
     'FoodOnline_main/static'
 ]
 
+# Media files configration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR /'media'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
