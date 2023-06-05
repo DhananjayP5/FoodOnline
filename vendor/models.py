@@ -35,8 +35,7 @@ class Vendor(models.Model):
                     break
                 else:
                     is_open = False
-        return is_open
-
+        return 
     
     def save(self, *args, **kwargs):
         if self.pk is not None:
